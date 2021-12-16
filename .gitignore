@@ -3,4 +3,4 @@ dist
 .vscode
 tmp
 .env
-yar-error.log
+yarn-error.log
