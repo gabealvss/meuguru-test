@@ -1,8 +1,11 @@
 import dotenv from "dotenv";
 
-import { LogType } from "./providers/ILogger";
-import { ConsoleLogger } from "./providers/implementations/ConsoleLogger";
-import { ExpressHTTPServer } from "./providers/implementations/Express/ExpressHTTPServer";
+import "reflect-metadata";
+import "./shared/containers";
+
+import { LogType } from "./shared/providers/ILogger";
+import { ConsoleLogger } from "./shared/providers/implementations/ConsoleLogger";
+import { ExpressHTTPServer } from "./shared/providers/implementations/Express/ExpressHTTPServer";
 
 dotenv.config();
 
