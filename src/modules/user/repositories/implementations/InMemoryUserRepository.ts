@@ -1,3 +1,7 @@
+import { hash } from "bcrypt";
+
+import { AppError } from "../../../../errors/AppError";
+import { IUpdatedUserData } from "../../DTOs/IUpdatedUserData";
 import { IUserData } from "../../DTOs/IUserData";
 import { User } from "../../entities/User";
 import { IUserRepository } from "../IUserRepository";
@@ -5,7 +9,7 @@ import { IUserRepository } from "../IUserRepository";
 class InMemoryUserRepository implements IUserRepository {
   private users: User[] = [];
 
-  async list(): Promise<User[]> {
+  async list(page: number): Promise<User[]> {
     return this.users;
   }
 
@@ -22,15 +26,44 @@ class InMemoryUserRepository implements IUserRepository {
   }
 
   async save(data: IUserData): Promise<User> {
-    throw new Error("Method not implemented.");
+    const user = new User({
+      name: data.name,
+      email: data.email,
+      password: await hash(data.password, 8),
+    });
+
+    this.users.push(user);
+    return user;
   }
 
-  async delete(id: string): Promise<boolean> {
+  async update(data: IUpdatedUserData): Promise<User> {
+    const user = this.users.find((user) => user.id === data.id);
+    const index = this.users.findIndex((user) => user.id === data.id);
+
+    if (!user) {
+      throw new AppError(
+        `Unable to find a user with id ${data.id} to update.`,
+        500
+      );
+    }
+
+    const updatedUser = new User(
+      {
+        name: data.name || user.name,
+        email: data.email || user.email,
+        password: (await hash(data.password, 8)) || user.password,
+      },
+      data.id
+    );
+
+    this.users.splice(index, 1, updatedUser);
+    return updatedUser;
+  }
+
+  async delete(id: string): Promise<void> {
     const user = this.users.findIndex((user) => user.id === id);
 
     this.users.splice(user, 1);
-
-    return true;
   }
 }
 
