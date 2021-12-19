@@ -18,6 +18,11 @@ class UserRepository implements IUserRepository {
     const users = await this.client.users.findMany({
       skip: 7 * page,
       take: 7,
+      orderBy: [
+        {
+          created_at: "desc",
+        },
+      ],
     });
 
     return users;
@@ -38,6 +43,23 @@ class UserRepository implements IUserRepository {
       where: {
         email,
       },
+    });
+
+    return user;
+  }
+
+  async findByName(name: string, page: number): Promise<User[]> {
+    const user = await this.client.users.findMany({
+      where: {
+        name,
+      },
+      skip: 7 * page,
+      take: 7,
+      orderBy: [
+        {
+          created_at: "desc",
+        },
+      ],
     });
 
     return user;

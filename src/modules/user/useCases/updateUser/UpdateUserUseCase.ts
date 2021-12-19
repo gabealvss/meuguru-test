@@ -29,11 +29,16 @@ class UpdateUserUseCase {
       );
     }
 
+    let pw = user.password;
+    if (typeof password !== "undefined") {
+      pw = await hash(password, 8);
+    }
+
     const updatedUser = await this.userRepository.update({
       id,
       name: name || user.name,
       email: email || user.email,
-      password: (await hash(password, 8)) || user.password,
+      password: pw,
     });
 
     return updatedUser;

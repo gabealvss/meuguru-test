@@ -16,7 +16,6 @@ const updateUserController = new UpdateUserController();
 
 userRouter.post("/", createUserController.handle);
 userRouter.get("/", listUsersController.handle);
-userRouter.get("/:id", findUserController.handle);
 userRouter.delete("/", deleteUserController.handle);
 userRouter.patch("/", updateUserController.handle);
 

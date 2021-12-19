@@ -6,6 +6,7 @@ interface IUserRepository {
   list(page: number): Promise<User[]>;
   findById(id: string): Promise<User>;
   findByEmail(email: string): Promise<User>;
+  findByName(name: string, page: number): Promise<User[]>;
   save(data: IUserData): Promise<User>;
   update(data: IUpdatedUserData): Promise<User>;
   delete(id: string): Promise<void>;

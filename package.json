@@ -1,7 +1,7 @@
 {
   "name": "meuguru-test",
   "version": "1.0.0",
-  "main": "dist/server.js",
+  "main": "dist/src/server.js",
   "license": "MIT",
   "scripts": {
     "dev": "ts-node-dev -r tsconfig-paths/register --inspect --transpile-only --ignore-watch node_modules --respawn src/server.ts",
@@ -12,7 +12,7 @@
     "prettify": "prettier --write .",
     "migrate": "prisma migrate dev",
     "migrate:deploy": "prisma migrate deploy",
-    "start": "node dist/server.js"
+    "start": "node dist/src/server.js"
   },
   "prisma": {
     "schema": "src/prisma/schema.prisma"

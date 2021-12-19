@@ -1,6 +1,7 @@
 import { inject, injectable } from "tsyringe";
 
 import { AppError } from "../../../../errors/AppError";
+import { IValidator } from "../../../../shared/providers/IValidator";
 import { User } from "../../entities/User";
 import { IUserRepository } from "../../repositories/IUserRepository";
 
@@ -14,12 +15,20 @@ interface IRequest {
 class CreateUserUseCase {
   constructor(
     @inject("UserRepository")
-    private userRepository: IUserRepository
+    private userRepository: IUserRepository,
+    @inject("RequestValidator")
+    private validator: IValidator
   ) {}
 
   async execute({ name, email, password }: IRequest): Promise<User> {
-    const userCheck = await this.userRepository.findByEmail(email);
+    if (!this.validator.validateParams({ name, email, password })) {
+      throw new AppError(
+        "Parâmetros inválidos. Por favor, preencha todos os parâmetros obrigatórios.",
+        400
+      );
+    }
 
+    const userCheck = await this.userRepository.findByEmail(email);
     if (userCheck) {
       throw new AppError(
         `Já existe uma conta cadastrada para o e-mail ${email}.`,

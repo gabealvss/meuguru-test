@@ -25,6 +25,12 @@ class InMemoryUserRepository implements IUserRepository {
     return user;
   }
 
+  async findByName(name: string, page: number): Promise<User[]> {
+    const user = this.users.filter((user) => user.name === name);
+
+    return user;
+  }
+
   async save(data: IUserData): Promise<User> {
     const user = new User({
       name: data.name,
